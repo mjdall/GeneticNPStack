@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 class Box implements Comparable<Box> {
@@ -6,6 +8,21 @@ class Box implements Comparable<Box> {
   int length;
   int area;
   private Random rand;
+
+  Box(Box copyFrom) {
+    this.width = copyFrom.width;
+    this.length = copyFrom.length;
+    this.height = copyFrom.height;
+    init();
+  }
+
+  Box(int[] dimensions) {
+    assert dimensions.length == 3;
+    this.width = dimensions[0];
+    this.height = dimensions[1];
+    this.length = dimensions[2];
+    init();
+  }
 
   /**
    * Returns whether or not this box can fit onto another boxes face.
@@ -34,30 +51,35 @@ class Box implements Comparable<Box> {
     return false;
   }
 
-  Box(Box copyFrom) {
-    this.width = copyFrom.width;
-    this.length = copyFrom.length;
-    this.height = copyFrom.height;
-    init();
-  }
-
-  Box(int[] dimensions) {
-    assert dimensions.length == 3;
-    this.width = dimensions[0];
-    this.height = dimensions[1];
-    this.length = dimensions[2];
-    init();
-  }
-
   private void init() {
     this.area = this.width * this.length;
     this.rand = new Random(System.nanoTime());
   }
 
-  public boolean equals(Box b) {
-    int compareVol = b.width * b.length * b.height;
-    int thisVol = this.width * this.length * this.height;
-    return compareVol == thisVol;
+  public int getVolume() {
+    return this.width * this.length * this.height;
+  }
+
+  boolean equals(Box b) {
+    ArrayList<Integer> thisDims = this.getBoxDimArrayList();
+    ArrayList<Integer> otherDims = b.getBoxDimArrayList();
+
+    for (int i = 0; i < 3; i++) {
+      if (thisDims.get(i) != otherDims.get(i)) {
+        break;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  private ArrayList<Integer> getBoxDimArrayList() {
+    ArrayList<Integer> dims = new ArrayList<>();
+    dims.add(this.width);
+    dims.add(this.length);
+    dims.add(this.height);
+    Collections.sort(dims);
+    return dims;
   }
 
   @Override
@@ -93,6 +115,6 @@ class Box implements Comparable<Box> {
   }
 
   void print() {
-    System.out.println(String.format("w:%d l:%d h:%d", this.width, this.length, this.height));
+    System.out.println(String.format("%d %d %d", this.width, this.length, this.height));
   }
 }
