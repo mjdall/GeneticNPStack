@@ -57,7 +57,7 @@ class BoxStack implements Comparable<BoxStack> {
     this.height += previous.height;
 
     for (Box b : boxes) {
-      if (!b.canFit(previous, !hardStack)) {
+      if (!b.canFit(previous, !hardStack, true)) {
         continue;
       }
 
@@ -151,7 +151,7 @@ class BoxStack implements Comparable<BoxStack> {
         }
 
         // if we can fit a box between the two
-        if (b.canFit(prev, true) && curr.canFit(b, false)) {
+        if (b.canFit(prev, true, true) && curr.canFit(b, false, false)) {
 
           // make sure we're only inserting when we can
           assert prev.width > b.width && prev.length > b.length;

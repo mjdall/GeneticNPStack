@@ -31,11 +31,11 @@ class Box implements Comparable<Box> {
    * @param tryRollOver - If true, the box will also be tried in the rolled over position.
    * @return Whether or not the box can fit onto the face of `onto`.
    */
-  boolean canFit(Box onto, boolean tryRollOver) {
+  boolean canFit(Box onto, boolean tryRollOver, boolean tryRotate) {
     if (onto.width - this.width > 0 && onto.length - this.length > 0) {
       // it can fit the way it is - todo: Randomly return reorientated box
       return true;
-    } else if (onto.width - this.length > 0 && onto.length - this.width > 0) {
+    } else if (tryRotate && onto.width - this.length > 0 && onto.length - this.width > 0) {
       // we can turn it sideways and it will fit
       this.turnSideways();
       return true;
@@ -44,7 +44,7 @@ class Box implements Comparable<Box> {
     // if we can try roll it over to fit
     if (tryRollOver) {
       this.rollOver();
-      return canFit(onto, false);
+      return canFit(onto, false, true);
     }
 
     // the box won't fit in any orientation
